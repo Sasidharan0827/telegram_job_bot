@@ -12,6 +12,14 @@ from dotenv import load_dotenv
 from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes
 
+# === Workaround for Python 3.13 compatibility ===
+import sys
+if sys.version_info >= (3, 13):
+    from telegram.ext._updater import Updater
+    if not hasattr(Updater, '__dict__'):
+        # Force __dict__ creation
+        Updater.__slots__ = tuple(list(getattr(Updater, '__slots__', [])))
+
 # Load env vars
 load_dotenv()
 BOT_TOKEN = os.getenv("BOT_TOKEN")
@@ -20,6 +28,8 @@ CHANNEL_URLS = [url.strip() for url in os.getenv("CHANNELS", "").split(",") if u
 # === Set up logging ===
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+# ... rest of your code continues ...
 
 # === Set up SQLite database ===
 conn = sqlite3.connect("job_bot.db", check_same_thread=False)
