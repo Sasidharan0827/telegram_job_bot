@@ -12,14 +12,6 @@ from dotenv import load_dotenv
 from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes
 
-# === Workaround for Python 3.13 compatibility ===
-import sys
-if sys.version_info >= (3, 13):
-    from telegram.ext._updater import Updater
-    if not hasattr(Updater, '__dict__'):
-        # Force __dict__ creation
-        Updater.__slots__ = tuple(list(getattr(Updater, '__slots__', [])))
-
 # Load env vars
 load_dotenv()
 BOT_TOKEN = os.getenv("BOT_TOKEN")
